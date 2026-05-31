@@ -4,65 +4,165 @@
 <meta charset="UTF-8" />
 <title>Amsterdam Airbnb — Market Segments</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<meta name="description" content="Descriptive market segmentation of Amsterdam Airbnb listings — stratified k-means + interactive neighbourhood map." />
+<meta name="description" content="An interactive look at how Amsterdam's Airbnb listings split into five market segments, with a clickable map and side-by-side comparisons." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Instrument+Serif&display=swap" rel="stylesheet">
 
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
       integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<header>
-  <div class="header-inner">
-    <div class="brand">
-      <span class="brand-dots" aria-hidden="true">
-        <i style="background:var(--c0)"></i><i style="background:var(--c1)"></i><i style="background:var(--c2)"></i><i style="background:var(--c3)"></i><i style="background:var(--c4)"></i>
-      </span>
-      <div>
-        <h1>Amsterdam Airbnb <span class="sep">·</span> market segments</h1>
-        <p class="subtitle">
-          Amsterdam's Airbnb listings grouped into five types by size, room type and location.
-          Click a neighbourhood to see which types it's made of.
-        </p>
-      </div>
+<!-- ============================== HERO ============================== -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <nav class="topbar">
+    <span class="logo">
+      <span class="logo-dots"><i></i><i></i><i></i><i></i><i></i></span>
+      <span>Amsterdam · Airbnb</span>
+    </span>
+    <a class="nav-link" href="#map-section">Map</a>
+    <a class="nav-link" href="#segments">Segments</a>
+    <a class="nav-link" href="#charts">Compare</a>
+    <a class="nav-link" href="#predict">Match</a>
+    <a class="nav-link cta" href="https://github.com/diklinuks/Airbnb-Machine-learning" target="_blank" rel="noopener">GitHub →</a>
+  </nav>
+
+  <div class="hero-inner">
+    <span class="eyebrow">Inside Airbnb · Amsterdam · March 2025</span>
+    <h1 class="hero-title">
+      Five kinds of <span class="serif">Airbnb</span> live in Amsterdam.
+    </h1>
+    <p class="hero-sub">
+      I clustered 7,846 listings by what's actually written on the door — size, room type, location —
+      then drew the map. Click any segment to watch the city light up.
+    </p>
+
+    <div class="stats">
+      <div class="stat reveal"><span class="num" data-count="7846">0</span><span class="lab">listings analysed</span></div>
+      <div class="stat reveal"><span class="num" data-count="5">0</span><span class="lab">market segments</span></div>
+      <div class="stat reveal"><span class="num" data-count="22">0</span><span class="lab">neighbourhoods</span></div>
+      <div class="stat reveal"><span class="num" data-count="200" data-prefix="€">0</span><span class="lab">median price / night</span></div>
     </div>
-    <div class="facts">
-      <div class="fact"><span class="fact-num">5</span><span class="fact-lab">segments</span></div>
-      <div class="fact"><span class="fact-num">7,846</span><span class="fact-lab">listings</span></div>
-      <div class="fact"><span class="fact-num">22</span><span class="fact-lab">neighbourhoods</span></div>
+
+    <a class="scroll-cue" href="#intro" aria-label="Scroll to start">
+      <span></span>
+    </a>
+  </div>
+</section>
+
+<!-- ============================== INTRO STORY ============================== -->
+<section id="intro" class="story reveal">
+  <span class="section-tag">The question</span>
+  <h2>Can the listing itself tell you what a night should cost?</h2>
+  <p class="lede">
+    I started out trying to <em>predict</em> nightly prices. The best model topped out at
+    <strong>R² ≈ 0.53</strong> — useful, but not enough to give a real number to a real
+    host. Static facts about a listing don't capture what really moves price: season,
+    events, demand. So I changed the question.
+  </p>
+  <p class="lede">
+    Instead of guessing a price, I asked <em>what kind of listing is this?</em> — and the
+    answer turned out to be cleaner, more honest, and more interesting to look at.
+  </p>
+</section>
+
+<!-- ============================== MAP ============================== -->
+<section id="map-section" class="map-section reveal">
+  <div class="section-head">
+    <span class="section-tag">The map</span>
+    <h2>One click per segment, and the city repaints itself.</h2>
+    <p class="lede small">
+      Each area is coloured by its most common segment. Click a chip below to switch the
+      view — the map shades every neighbourhood by how much of that segment lives there.
+    </p>
+  </div>
+
+  <div class="map-shell">
+    <div id="map"></div>
+
+    <aside class="map-panel">
+      <div class="panel-block">
+        <h3>Segments</h3>
+        <p class="panel-hint">Sorted by typical price. Click to highlight.</p>
+        <div id="legend" class="legend"></div>
+      </div>
+
+      <div class="panel-block" id="cluster-detail-block" hidden>
+        <h3>Selected segment</h3>
+        <div id="cluster-detail" class="cluster-detail"></div>
+      </div>
+
+      <div class="panel-block">
+        <h3>Selected neighbourhood</h3>
+        <div id="neigh-detail" class="neigh-detail empty">Click any area on the map.</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- ============================== SEGMENT CARDS ============================== -->
+<section id="segments" class="segments reveal">
+  <div class="section-head">
+    <span class="section-tag">The five</span>
+    <h2>Meet the segments.</h2>
+    <p class="lede small">
+      Same five groups the map uses, side by side. Hover a card; click to focus the map.
+    </p>
+  </div>
+  <div id="segment-cards" class="segment-cards"></div>
+</section>
+
+<!-- ============================== CHARTS ============================== -->
+<section id="charts" class="charts reveal">
+  <div class="section-head">
+    <span class="section-tag">Side by side</span>
+    <h2>Where the money and the people are.</h2>
+  </div>
+
+  <div class="chart-grid">
+    <div class="chart-card reveal">
+      <h3>Typical price per night</h3>
+      <p class="chart-cap">Each bar is the price range most listings fall in. The dot is the median.</p>
+      <div class="chart-box"><canvas id="chart-price"></canvas></div>
+    </div>
+
+    <div class="chart-card reveal">
+      <h3>Share of the market</h3>
+      <p class="chart-cap">How many listings each segment contains.</p>
+      <div class="chart-box"><canvas id="chart-share"></canvas></div>
+    </div>
+
+    <div class="chart-card wide reveal">
+      <h3>Composition of the busiest neighbourhoods</h3>
+      <p class="chart-cap">Top 8 neighbourhoods by listing count — what each is made of.</p>
+      <div class="chart-box tall"><canvas id="chart-neigh"></canvas></div>
     </div>
   </div>
-</header>
+</section>
 
-<div class="layout">
+<!-- ============================== PREDICT ============================== -->
+<section id="predict" class="predict-section reveal">
+  <div class="section-head">
+    <span class="section-tag">Try it</span>
+    <h2>Describe a place. I'll show you where it fits.</h2>
+    <p class="lede small">Pick a room type and rough size. Click the map for a location (optional). I'll match you to the closest segment and highlight where that segment lives.</p>
+  </div>
 
-  <div id="map"></div>
-
-  <aside class="panel">
-    <section>
-      <h2>Segments</h2>
-      <p class="hint">Sorted by typical price. Click one to shade the map by where it's most common.</p>
-      <div id="legend" class="legend"></div>
-    </section>
-
-    <section id="cluster-detail-block" hidden>
-      <h2>Segment detail</h2>
-      <div id="cluster-detail" class="cluster-detail"></div>
-    </section>
-
-    <section>
-      <h2>Selected neighbourhood</h2>
-      <div id="neigh-detail" class="neigh-detail empty">
-        click a neighbourhood on the map…
-      </div>
-    </section>
-
-    <section class="predict">
-      <h2>Find your segment</h2>
-      <p class="hint">Describe a place and I'll show which segment it fits, and where that segment lives on the map.</p>
+  <div class="predict-card">
+    <div class="predict-form">
       <label>Room type</label>
       <select id="in-room">
         <option value="Entire home/apt">Entire home / apartment</option>
@@ -77,16 +177,44 @@
         <div><label>Bathrooms</label><input id="in-bath" type="number" value="1" min="0.5" max="6" step="0.5"></div>
       </div>
       <label>Location</label>
-      <div id="loc-indicator" class="loc">Click anywhere on the map to set a location (optional).</div>
-      <button id="predict-btn">Find segment</button>
-      <div id="predict-result" class="result" hidden></div>
-    </section>
-  </aside>
+      <div id="loc-indicator" class="loc">Click anywhere on the map above to set a location (optional).</div>
+      <button id="predict-btn">Find my segment →</button>
+    </div>
+    <div id="predict-result" class="predict-result" hidden></div>
+  </div>
+</section>
 
-</div>
+<!-- ============================== STORY ============================== -->
+<section id="story" class="story-end reveal">
+  <span class="section-tag">Behind the scenes</span>
+  <h2>How this was built.</h2>
+  <div class="story-grid">
+    <div>
+      <h4>1 · Cleaned the data</h4>
+      <p>Inside Airbnb's March 2025 snapshot, joined with the booking calendar for a real price signal, with bathrooms parsed into number + kind and missing beds imputed with a Random Forest.</p>
+    </div>
+    <div>
+      <h4>2 · Tried to predict price</h4>
+      <p>Ridge, Random Forest and XGBoost on log-price. Best was XGBoost at R² ≈ 0.53. SHAP and partial-dependence confirmed the static features hit a ceiling.</p>
+    </div>
+    <div>
+      <h4>3 · Pivoted to segmentation</h4>
+      <p>Stratified k-means on structural features only — <strong>price is never an input</strong>. The five groups you're looking at fall out, and they're stable across the k-selection sweep.</p>
+    </div>
+    <div>
+      <h4>4 · Shipped it</h4>
+      <p>This page. Vanilla JS, Leaflet for the map, Chart.js for the comparisons, nothing to install. The whole dataset is one 15 KB JSON.</p>
+    </div>
+  </div>
+  <a class="ghost-cta" href="https://github.com/diklinuks/Airbnb-Machine-learning" target="_blank" rel="noopener">
+    See the code on GitHub →
+  </a>
+</section>
 
 <footer>
-  <span>Data: Inside Airbnb — Amsterdam, March 2025 · Map tiles: CARTO &amp; OpenStreetMap</span>
+  <span>Data · Inside Airbnb (Amsterdam, March 2025)</span>
+  <span>Map tiles · CARTO &amp; OpenStreetMap</span>
+  <span>Built by Tymur Abdurakhmanov</span>
 </footer>
 
 <script src="app.js"></script>
