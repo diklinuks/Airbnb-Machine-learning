@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Amsterdam Airbnb — Market Segments</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="Descriptive market segmentation of Amsterdam Airbnb listings — stratified k-means + interactive neighbourhood map." />
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="brand">
+      <span class="brand-dots" aria-hidden="true">
+        <i style="background:var(--c0)"></i><i style="background:var(--c1)"></i><i style="background:var(--c2)"></i><i style="background:var(--c3)"></i><i style="background:var(--c4)"></i>
+      </span>
+      <div>
+        <h1>Amsterdam Airbnb <span class="sep">·</span> market segments</h1>
+        <p class="subtitle">
+          Amsterdam's Airbnb listings grouped into five types by size, room type and location.
+          Click a neighbourhood to see which types it's made of.
+        </p>
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><span class="fact-num">5</span><span class="fact-lab">segments</span></div>
+      <div class="fact"><span class="fact-num">7,846</span><span class="fact-lab">listings</span></div>
+      <div class="fact"><span class="fact-num">22</span><span class="fact-lab">neighbourhoods</span></div>
+    </div>
+  </div>
+</header>
+
+<div class="layout">
+
+  <div id="map"></div>
+
+  <aside class="panel">
+    <section>
+      <h2>Segments</h2>
+      <p class="hint">Sorted by typical price. Click one to shade the map by where it's most common.</p>
+      <div id="legend" class="legend"></div>
+    </section>
+
+    <section id="cluster-detail-block" hidden>
+      <h2>Segment detail</h2>
+      <div id="cluster-detail" class="cluster-detail"></div>
+    </section>
+
+    <section>
+      <h2>Selected neighbourhood</h2>
+      <div id="neigh-detail" class="neigh-detail empty">
+        click a neighbourhood on the map…
+      </div>
+    </section>
+
+    <section class="predict">
+      <h2>Find your segment</h2>
+      <p class="hint">Describe a place and I'll show which segment it fits, and where that segment lives on the map.</p>
+      <label>Room type</label>
+      <select id="in-room">
+        <option value="Entire home/apt">Entire home / apartment</option>
+        <option value="Private room">Private room</option>
+        <option value="Hotel room">Hotel room</option>
+        <option value="Shared room">Shared room</option>
+      </select>
+      <div class="grid2">
+        <div><label>Guests</label><input id="in-acc" type="number" value="2" min="1" max="16"></div>
+        <div><label>Bedrooms</label><input id="in-bed" type="number" value="1" min="0" max="10" step="0.5"></div>
+        <div><label>Beds</label><input id="in-beds" type="number" value="1" min="1" max="16"></div>
+        <div><label>Bathrooms</label><input id="in-bath" type="number" value="1" min="0.5" max="6" step="0.5"></div>
+      </div>
+      <label>Location</label>
+      <div id="loc-indicator" class="loc">Click anywhere on the map to set a location (optional).</div>
+      <button id="predict-btn">Find segment</button>
+      <div id="predict-result" class="result" hidden></div>
+    </section>
+  </aside>
+
+</div>
+
+<footer>
+  <span>Data: Inside Airbnb — Amsterdam, March 2025 · Map tiles: CARTO &amp; OpenStreetMap</span>
+</footer>
+
+<script src="app.js"></script>
+</body>
+</html>

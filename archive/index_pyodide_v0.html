@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Airbnb Segmentation Demo</title>
+    <script src="https://cdn.jsdelivr.net/pyodide/v0.24.1/full/pyodide.js"></script>
+</head>
+<body>
+<h2>Amsterdam Airbnb segmentation & fairness</h2>
+
+<!-- Numeric inputs -->
+<label>Price (€):</label>
+<input id="price" type="number" step="1"><br><br>
+
+<label>Accommodates:</label>
+<input id="accommodates" type="number" step="1"><br><br>
+
+<label>Beds:</label>
+<input id="beds" type="number" step="1"><br><br>
+
+<label>Bedrooms:</label>
+<input id="bedrooms" type="number" step="1"><br><br>
+
+<label>Minimum nights:</label>
+<input id="min_nights" type="number" step="1"><br><br>
+
+<label>Maximum nights:</label>
+<input id="max_nights" type="number" step="1"><br><br>
+
+<label>Latitude:</label>
+<input id="lat" type="number" step="0.000001"><br><br>
+
+<label>Longitude:</label>
+<input id="lon" type="number" step="0.000001"><br><br>
+
+<!-- Room type -->
+<label>Room type:</label>
+<select id="room_type">
+    <option value="room_Entire home/apt">Entire home/apt</option>
+    <option value="room_Private room">Private room</option>
+    <option value="room_Shared room">Shared room</option>
+    <option value="room_Hotel room">Hotel room</option>
+</select>
+<br><br>
+
+<!-- Property type -->
+<label>Property type:</label>
+<select id="prop_type">
+    <option value="prop_entire home">Entire home</option>
+    <option value="prop_entire condo">Entire condo</option>
+    <option value="prop_entire loft">Entire loft</option>
+    <option value="prop_entire rental unit">Entire rental unit</option>
+    <option value="prop_entire serviced apartment">Serviced apartment</option>
+    <option value="prop_entire townhouse">Townhouse</option>
+    <option value="prop_private room in home">Private room in home</option>
+    <option value="prop_room in boutique hotel">Room in boutique hotel</option>
+    <option value="prop_room in hotel">Room in hotel</option>
+    <option value="prop_houseboat">Houseboat</option>
+    <option value="prop_boat">Boat</option>
+    <option value="prop_other">Other</option>
+    <option value="prop_private room in condo">Private room in condo</option>
+    <option value="prop_private room in condo">Private room in condo</option>
+    <option value="prop_private room in rental unit">Private room in rental unit</option>
+    <option value="prop_private room in bed and breakfast">Private room in B&B</option>
+</select>
+<br><br>
+
+<!-- Bath type -->
+<label>Bathroom type:</label>
+<select id="bath_type">
+    <option value="bath_1 bath">1 bath</option>
+    <option value="bath_1 private_bath">1 private bath</option>
+    <option value="bath_1 shared_bath">1 shared bath</option>
+    <option value="bath_1.5 bath">1.5 bath</option>
+    <option value="bath_1.5 shared_bath">1.5 shared bath</option>
+    <option value="bath_2 bath">2 bath</option>
+    <option value="bath_2.5 bath">2.5 bath</option>
+    <option value="bath_3 bath">3 bath</option>
+    <option value="bath_other">Other</option>
+</select>
+<br><br>
+
+<!-- Neighbourhood -->
+<label>Neighbourhood:</label>
+<select id="neigh">
+    <option value="geo_Bijlmer-Centrum">Bijlmer-Centrum</option>
+    <option value="geo_Bijlmer-Oost">Bijlmer-Oost</option>
+    <option value="geo_Bos en Lommer">Bos en Lommer</option>
+    <option value="geo_Buitenveldert - Zuidas">Buitenveldert - Zuidas</option>
+    <option value="geo_Centrum-Oost">Centrum-Oost</option>
+    <option value="geo_Centrum-West">Centrum-West</option>
+    <option value="geo_De Aker - Nieuw Sloten">De Aker - Nieuw Sloten</option>
+    <option value="geo_De Baarsjes - Oud-West">De Baarsjes - Oud-West</option>
+    <option value="geo_De Pijp - Rivierenbuurt">De Pijp - Rivierenbuurt</option>
+    <option value="geo_Gaasperdam - Driemond">Gaasperdam - Driemond</option>
+    <option value="geo_Geuzenveld - Slotermeer">Geuzenveld - Slotermeer</option>
+    <option value="geo_IJburg - Zeeburgereiland">IJburg - Zeeburgereiland</option>
+    <option value="geo_Noord-Oost">Noord-Oost</option>
+    <option value="geo_Noord-West">Noord-West</option>
+    <option value="geo_Oostelijk Havengebied - Indische Buurt">Oostelijk Havengebied - Indische Buurt</option>
+    <option value="geo_Osdorp">Osdorp</option>
+    <option value="geo_Oud-Noord">Oud-Noord</option>
+    <option value="geo_Oud-Oost">Oud-Oost</option>
+    <option value="geo_Slotervaart">Slotervaart</option>
+    <option value="geo_Watergraafsmeer">Watergraafsmeer</option>
+    <option value="geo_Westerpark">Westerpark</option>
+    <option value="geo_Zuid">Zuid</option>
+</select>
+<br><br>
+
+<button onclick="runModel()">Run model</button>
+
+<h3>Result:</h3>
+<pre id="output"></pre>
+
+<script>
+
+    const MODEL_JSON = '{"feature_order": ["price", "log_price", "latitude", "longitude", "dist_to_city_center_m", "dist_to_region_centroid_m", "accommodates", "bedrooms", "beds", "beds_per_bedroom", "minimum_nights", "maximum_nights", "stay_flexibility", "occupancy_ratio", "median_price_neigh", "rel_price", "price_per_person", "price_per_bed", "price_normalized", "room_Entire home/apt", "room_Hotel room", "room_Private room", "room_Shared room", "prop_boat", "prop_entire condo", "prop_entire home", "prop_entire loft", "prop_entire rental unit", "prop_entire serviced apartment", "prop_entire townhouse", "prop_houseboat", "prop_other", "prop_private room in bed and breakfast", "prop_private room in condo", "prop_private room in home", "prop_private room in rental unit", "prop_room in boutique hotel", "prop_room in hotel", "bath_1 bath", "bath_1 private_bath", "bath_1 shared_bath", "bath_1.5 bath", "bath_1.5 shared_bath", "bath_2 bath", "bath_2.5 bath", "bath_3 bath", "bath_other", "geo_Bijlmer-Centrum", "geo_Bijlmer-Oost", "geo_Bos en Lommer", "geo_Buitenveldert - Zuidas", "geo_Centrum-Oost", "geo_Centrum-West", "geo_De Aker - Nieuw Sloten", "geo_De Baarsjes - Oud-West", "geo_De Pijp - Rivierenbuurt", "geo_Gaasperdam - Driemond", "geo_Geuzenveld - Slotermeer", "geo_IJburg - Zeeburgereiland", "geo_Noord-Oost", "geo_Noord-West", "geo_Oostelijk Havengebied - Indische Buurt", "geo_Osdorp", "geo_Oud-Noord", "geo_Oud-Oost", "geo_Slotervaart", "geo_Watergraafsmeer", "geo_Westerpark", "geo_Zuid"], "scaler_mean": [176.84421545157778, 5.0586323844623, 52.36662727226441, 4.889371176325353, 2630.8515393326156, 866.8352530764186, 2.905658324265506, 1.5294885745375408, 1.7082698585418934, 1.1053599089254853, 3.99031556039173, 164.76093579978237, 85.37196815844923, 1.8115422245509298, 171.83813928182806, 1.0318388792853144, 67.88813310048674, 126.33632806692763, 0.09384025597386805, 0.8335146898803046, 0.003264417845484222, 0.16050054406964093, 0.002720348204570185, 0.011207834602829161, 0.18008705114254625, 0.10489662676822634, 0.0235038084874864, 0.450272034820457, 0.009031556039173013, 0.021545157780195865, 0.0176278563656148, 0.0602829162132753, 0.02763873775843308, 0.015669205658324265, 0.01381936887921654, 0.03471164309031556, 0.007072905331882481, 0.022633297062023938, 0.5348204570184983, 0.08150163220892274, 0.03057671381936888, 0.2471164309031556, 0.013928182807399348, 0.051142546245919476, 0.018063112078346027, 0.008487486398258977, 0.014363438520130577, 0.005984766050054407, 0.005984766050054407, 0.003590859630032644, 0.003590859630032644, 0.05451577801958651, 0.05451577801958651, 0.012840043525571273, 0.012840043525571273, 0.07867247007616975, 0.07867247007616975, 0.10380848748639826, 0.10380848748639826, 0.005984766050054407, 0.005984766050054407, 0.17899891186071817, 0.17899891186071817, 0.11828073993471164, 0.11828073993471164, 0.005114254624591948, 0.005114254624591948, 0.013710554951033732, 0.013710554951033732, 0.01926006528835691, 0.01926006528835691, 0.017301414581066377, 0.017301414581066377, 0.029162132752992384, 0.029162132752992384, 0.042002176278563653, 0.042002176278563653, 0.004787812840043526, 0.004787812840043526, 0.04591947769314472, 0.04591947769314472, 0.0646354733405876, 0.0646354733405876, 0.019804134929270946, 0.019804134929270946, 0.029815016322089227, 0.029815016322089227, 0.0721436343852013, 0.0721436343852013, 0.0736670293797606, 0.0736670293797606], "scaler_scale": [82.72475649277713, 0.521262875917164, 0.0172585596200627, 0.03517428012020855, 1583.1463867583218, 564.0813216705703, 1.2241319354285463, 0.8582638418520968, 1.2167166923038755, 0.550074485767295, 12.278878323886293, 167.26259734863615, 115.86386958850395, 0.5536979127364556, 13.45429931238076, 0.4812188310992439, 36.91389745325961, 74.7433204335376, 0.07515242180528142, 0.37251570656019883, 0.05704175156509752, 0.3670696383834955, 0.052085966538176834, 0.10527211903607141, 0.3842599447682885, 0.30642017632798557, 0.1514971269498863, 0.49752098395856853, 0.09460437111827494, 0.1451928509136119, 0.13159450993703367, 0.238010264959515, 0.16393546880877746, 0.12419211590258619, 0.11674071236289713, 0.18304847697887602, 0.08380262133160699, 0.1487314053121469, 0.4987860621278655, 0.2736039403155668, 0.17216787851215828, 0.4313350211620215, 0.1171929542723581, 0.22028841596734824, 0.1331797133965648, 0.09173575623985636, 0.11898373903189044, 0.07712942775219146, 0.07712942775219146, 0.05981609613766219, 0.05981609613766219, 0.22703261432337352, 0.22703261432337352, 0.11258408772039105, 0.11258408772039105, 0.26922687928266736, 0.26922687928266736, 0.30501194306483237, 0.30501194306483237, 0.07712942775219146, 0.07712942775219146, 0.3833514072145778, 0.3833514072145778, 0.32294025220651684, 0.32294025220651684, 0.07133091212249278, 0.07133091212249278, 0.1162866098653169, 0.1162866098653169, 0.13743767741578414, 0.13743767741578414, 0.13039200755629327, 0.13039200755629327, 0.1682608176798426, 0.1682608176798426, 0.20059410127525715, 0.20059410127525715, 0.06902818039215752, 0.06902818039215752, 0.20931048531197263, 0.20931048531197263, 0.24588153433437368, 0.24588153433437368, 0.13932670658913235, 0.13932670658913235, 0.170076691888697, 0.170076691888697, 0.25872558899903136, 0.25872558899903136, 0.26122824916559484, 0.26122824916559484], "pca_components": [[0.2187465747388298, 0.21982561153208502, -0.05637472155515344, -0.13983207645054274, -0.29311106807835746, -0.1651605873172233, -0.16899433030885574, -0.1694123038729628, -0.18151103358019371, -0.07400842496409347, -0.004272775683612198, -0.006584526367918767, -0.010700618368205435, 0.09033120578261732, 0.2402344305241916, 0.17597984673198042, 0.2962360996744506, 0.31223845810084055, 0.27231818560498033, 0.07474136888243262, -0.0021028990053960977, -0.0749650937690403, -0.003935242990006983, -0.02112740127527707, 0.04184034469214032, -0.1539387307783843, 0.024371339641399897, 0.14290325385147404, -0.004355087410535478, -0.05755891941283571, -0.004597168981402486, -0.05024742968222802, -0.0232282367243398, -0.028185339208514924, -0.04741610996057277, -0.02021249357380859, -0.0009449842139775514, -0.02364508611327309, 0.10443481638877661, -0.02934843006401793, -0.03973930507531316, -0.010161825609164829, -0.0633068000978879, -0.053322931662972195, -0.045149423919233544, -0.03697011263940623, -0.035851940538930996, -0.06877552801076775, -0.06877552801076774, -0.0577127019112445, -0.0577127019112445, 0.0014759727127368525, 0.0014759727127368525, -0.005541244703642477, -0.005541244703642482, 0.0424547796455015, 0.04245477964550149, 0.07207425358198316, 0.07207425358198316, -0.061687757566224376, -0.061687757566224376, 0.12454501448933525, 0.12454501448933528, 0.0714038059097883, 0.0714038059097883, -0.07310203455231283, -0.07310203455231283, -0.0709494266637688, -0.0709494266637688, -0.10563039690049619, -0.10563039690049622, -0.13012546846171902, -0.13012546846171902, -0.12295421491509269, -0.1229542149150927, -0.03571469880732836, -0.03571469880732836, -0.03748071578867281, -0.03748071578867281, -0.09145254971904254, -0.09145254971904254, 0.010085691345459336, 0.010085691345459337, -0.04998528273753757, -0.04998528273753757, -0.04800317992635911, -0.04800317992635911, 0.03250101852932263, 0.03250101852932263, 0.03199370042718982, 0.031993700427189825], [0.18429910858365672, 0.17476901738066175, 0.033824420367962044, 0.014516891475692517, 0.12380613111657945, 0.03205015999816607, 0.18875292822018225, 0.23212028029019266, 0.14787031835098152, -0.03648995047600119, 0.009349888423575266, -0.13293841050893024, -0.18100834573423208, -0.009505450545321762, -0.07941133112894566, 0.19934339368280055, 0.02956667195433407, 0.028269819640530998, -0.029693045618142663, 0.3845188491233704, -0.04207306889304564, -0.3778880005052772, -0.040858942821655524, 0.031159382162157922, 0.053719092854823146, 0.13811583019388457, 0.016635285908758964, 0.12310244274852968, 0.0031719612863171415, 0.06663975546498549, 0.02666543949135023, -0.14280797191955985, -0.14310836867524596, -0.1109552390088987, -0.09565615392986022, -0.17444325005473607, -0.07840968825092791, -0.15191958532254315, 0.12615677474370904, -0.27914297722807135, -0.1734575489781409, 0.0647035678950677, -0.09533926314454907, 0.07225085304481146, 0.058398904088314794, 0.04095340026509488, -0.007337939920051464, -0.025179440824868945, -0.02517944082486896, 0.004907185212762535, 0.004907185212762535, 0.0373976676819508, 0.0373976676819508, -0.009722035452487055, -0.00972203545248705, -0.09396712870237432, -0.09396712870237431, -0.1592174654211563, -0.1592174654211563, 0.0013666454820338964, 0.0013666454820338923, 0.021922465271482366, 0.02192246527148238, 0.012646462588762973, 0.012646462588762973, -0.0036571832639414182, -0.0036571832639414182, 0.01041728803907286, 0.010417288039072862, 0.04562240647902906, 0.04562240647902906, 0.0378485705129374, 0.0378485705129374, 0.06489404467500523, 0.06489404467500523, 0.02016517009575963, 0.020165170095759626, 0.004698856791181545, 0.004698856791181545, 0.04719520806885362, 0.0471952080688536, 0.02380383263448318, 0.023803832634483175, 0.01963679172654158, 0.019636791726541585, 0.011461239462785787, 0.011461239462785785, 0.027939375405886254, 0.02793937540588625, 0.0016507126167907302, 0.0016507126167907343]], "pca_mean": [2.5359958360099334e-16, -7.484280394078096e-16, 4.873256193456454e-13, 1.491907794257551e-14, -8.504864084179654e-17, 1.2409369868280314e-16, 8.040962406860763e-17, -6.649257374904093e-17, -3.7112134185511215e-17, 3.401945633671862e-17, 1.5463389243963008e-18, 1.8556067092755607e-17, -3.0926778487926015e-17, -3.6029696938433805e-16, 7.894060209043116e-16, -2.350435165082377e-16, 1.3143880857368556e-16, -4.9482845580681626e-17, 1.4226318104445967e-16, 8.659497976619284e-17, -1.2370711395170406e-17, -6.185355697585203e-17, -1.5463389243963008e-17, 1.3917050319566706e-17, -6.185355697585203e-18, 1.8556067092755607e-17, 1.8556067092755607e-17, 8.659497976619284e-17, 1.8556067092755607e-17, 3.7112134185511215e-17, -1.2370711395170406e-17, -3.7112134185511215e-17, -4.329748988309642e-17, 2.4741422790340813e-17, 2.164874494154821e-17, -4.329748988309642e-17, -1.5463389243963008e-17, 2.4741422790340813e-17, 7.422426837102243e-17, -4.329748988309642e-17, 4.329748988309642e-17, 3.7112134185511215e-17, 3.0926778487926015e-17, 2.8607270101331565e-17, 3.865847310990752e-17, -1.932923655495376e-17, -2.319508386594451e-18, -1.6236558706161157e-17, -1.6236558706161157e-17, -1.3143880857368556e-17, -1.3143880857368556e-17, 5.4121862353870525e-18, 5.4121862353870525e-18, 1.2370711395170406e-17, 1.2370711395170406e-17, -1.2370711395170406e-17, -1.2370711395170406e-17, 2.628776171473711e-17, 2.628776171473711e-17, -1.3143880857368556e-17, -1.3143880857368556e-17, -3.7112134185511215e-17, -3.7112134185511215e-17, 1.0824372470774105e-17, 1.0824372470774105e-17, -1.2370711395170406e-17, -1.2370711395170406e-17, -2.783410063913341e-17, -2.783410063913341e-17, 3.0926778487926015e-17, 3.0926778487926015e-17, -8.504864084179655e-18, -8.504864084179655e-18, -2.1262160210449136e-18, -2.1262160210449136e-18, -5.4121862353870525e-18, -5.4121862353870525e-18, 5.702124783711359e-18, 5.702124783711359e-18, -3.169994795012417e-17, -3.169994795012417e-17, 1.0051203008575954e-17, 1.0051203008575954e-17, 4.639016773188902e-17, 4.639016773188902e-17, -3.0926778487926015e-17, -3.0926778487926015e-17, 4.639016773188902e-18, 4.639016773188902e-18, 3.0926778487926015e-17, 3.0926778487926015e-17], "kmeans_cluster_centers": [[-3.830165315433007, 1.8863824186438833], [2.4027188114449154, 0.7933866333502815], [-0.19779419107204976, 0.43402473617760895], [-0.8148051278908639, -4.362034078715499]], "cluster_label_map": {"2": "low", "3": "mid", "0": "upper_mid", "1": "high"}, "segment_median_price": {"high": 249.5, "low": 120.0, "mid": 125.0, "upper_mid": 140.0}, "neigh_meta": {"Bijlmer-Centrum": {"median_price_neigh": 120.0, "region_area_m2": 55.0, "centroid_lat": 52.317078329454546, "centroid_lon": 4.9495355970363635}, "Bijlmer-Oost": {"median_price_neigh": 120.0, "region_area_m2": 33.0, "centroid_lat": 52.32129377, "centroid_lon": 4.978568165939394}, "Bos en Lommer": {"median_price_neigh": 160.0, "region_area_m2": 501.0, "centroid_lat": 52.3784697688024, "centroid_lon": 4.8514539297205586}, "Buitenveldert - Zuidas": {"median_price_neigh": 183.0, "region_area_m2": 118.0, "centroid_lat": 52.33084665033898, "centroid_lon": 4.869917850008474}, "Centrum-Oost": {"median_price_neigh": 180.0, "region_area_m2": 723.0, "centroid_lat": 52.36627614962656, "centroid_lon": 4.905658360679115}, "Centrum-West": {"median_price_neigh": 180.0, "region_area_m2": 954.0, "centroid_lat": 52.37613353155136, "centroid_lon": 4.887287268012578}, "De Aker - Nieuw Sloten": {"median_price_neigh": 120.0, "region_area_m2": 55.0, "centroid_lat": 52.3449190389091, "centroid_lon": 4.801626332181818}, "De Baarsjes - Oud-West": {"median_price_neigh": 180.0, "region_area_m2": 1645.0, "centroid_lat": 52.36631005920365, "centroid_lon": 4.8627969223361704}, "De Pijp - Rivierenbuurt": {"median_price_neigh": 180.0, "region_area_m2": 1087.0, "centroid_lat": 52.350796724839, "centroid_lon": 4.897447702212512}, "Gaasperdam - Driemond": {"median_price_neigh": 122.5, "region_area_m2": 47.0, "centroid_lat": 52.30085515297873, "centroid_lon": 4.983348010361702}, "Geuzenveld - Slotermeer": {"median_price_neigh": 145.0, "region_area_m2": 126.0, "centroid_lat": 52.37932848865079, "centroid_lon": 4.820633587650794}, "IJburg - Zeeburgereiland": {"median_price_neigh": 180.0, "region_area_m2": 177.0, "centroid_lat": 52.356960463898304, "centroid_lon": 4.994007190768362}, "Noord-Oost": {"median_price_neigh": 160.0, "region_area_m2": 159.0, "centroid_lat": 52.39525313710692, "centroid_lon": 4.95484463027044}, "Noord-West": {"median_price_neigh": 153.0, "region_area_m2": 268.0, "centroid_lat": 52.41239000011194, "centroid_lon": 4.900295455679105}, "Oostelijk Havengebied - Indische Buurt": {"median_price_neigh": 160.0, "region_area_m2": 386.0, "centroid_lat": 52.366150654740935, "centroid_lon": 4.939699774334197}, "Osdorp": {"median_price_neigh": 129.5, "region_area_m2": 44.0, "centroid_lat": 52.35741029636363, "centroid_lon": 4.798470930727273}, "Oud-Noord": {"median_price_neigh": 160.0, "region_area_m2": 422.0, "centroid_lat": 52.392302852511854, "centroid_lon": 4.916312592755924}, "Oud-Oost": {"median_price_neigh": 169.5, "region_area_m2": 594.0, "centroid_lat": 52.3571855006229, "centroid_lon": 4.91876165193266}, "Slotervaart": {"median_price_neigh": 132.5, "region_area_m2": 182.0, "centroid_lat": 52.35846091862638, "centroid_lon": 4.835290924384616}, "Watergraafsmeer": {"median_price_neigh": 175.0, "region_area_m2": 274.0, "centroid_lat": 52.34884384051095, "centroid_lon": 4.930717594076643}, "Westerpark": {"median_price_neigh": 170.0, "region_area_m2": 663.0, "centroid_lat": 52.383029797978885, "centroid_lon": 4.875369732838612}, "Zuid": {"median_price_neigh": 183.0, "region_area_m2": 677.0, "centroid_lat": 52.35163705437223, "centroid_lon": 4.8612190265849335}}, "city_center_lat": 52.36662727226441, "city_center_lon": 4.889371176325353}';
+
+    let pyodideReadyPromise = loadPyodide();
+
+    async function runModel() {
+        const price = parseFloat(document.getElementById("price").value || "0");
+        const accommodates = parseFloat(document.getElementById("accommodates").value || "1");
+        const beds = parseFloat(document.getElementById("beds").value || "1");
+        const bedrooms = parseFloat(document.getElementById("bedrooms").value || "1");
+        const minNights = parseFloat(document.getElementById("min_nights").value || "1");
+        const maxNights = parseFloat(document.getElementById("max_nights").value || "1");
+        const lat = parseFloat(document.getElementById("lat").value || "52.37");
+        const lon = parseFloat(document.getElementById("lon").value || "4.89");
+
+        const roomType = document.getElementById("room_type").value;
+        const propType = document.getElementById("prop_type").value;
+        const bathType = document.getElementById("bath_type").value;
+        const neigh = document.getElementById("neigh").value;
+
+        let pyodide = await pyodideReadyPromise;
+
+        pyodide.globals.set("price_js", price);
+        pyodide.globals.set("accommodates_js", accommodates);
+        pyodide.globals.set("beds_js", beds);
+        pyodide.globals.set("bedrooms_js", bedrooms);
+        pyodide.globals.set("min_nights_js", minNights);
+        pyodide.globals.set("max_nights_js", maxNights);
+        pyodide.globals.set("lat_js", lat);
+        pyodide.globals.set("lon_js", lon);
+        pyodide.globals.set("room_type_js", roomType);
+        pyodide.globals.set("prop_type_js", propType);
+        pyodide.globals.set("bath_type_js", bathType);
+        pyodide.globals.set("neigh_js", neigh);
+        pyodide.globals.set("MODEL_JSON", MODEL_JSON);
+
+        let result = await pyodide.runPythonAsync(`
+import json
+import math
+import numpy as np
+import pandas as pd
+
+# Load model payload
+model = json.loads(MODEL_JSON)
+
+feature_order = model["feature_order"]
+scaler_mean = np.array(model["scaler_mean"])
+scaler_scale = np.array(model["scaler_scale"])
+pca_components = np.array(model["pca_components"])
+pca_mean = np.array(model["pca_mean"])
+cluster_centers = np.array(model["kmeans_cluster_centers"])
+cluster_label_map = {int(k): v for k, v in model["cluster_label_map"].items()}
+segment_median_price = model["segment_median_price"]
+neigh_meta = model["neigh_meta"]
+city_center_lat = model["city_center_lat"]
+city_center_lon = model["city_center_lon"]
+
+# Build single-row dataframe with all zeros
+x = pd.DataFrame([0.0] * len(feature_order), index=feature_order).T
+
+# Helper to set numeric safely
+def set_val(col, val):
+    if col in x.columns:
+        x.at[0, col] = float(val)
+
+# Fill basic numeric features
+set_val("price", price_js)
+set_val("log_price", math.log(price_js + 1e-6))
+set_val("latitude", lat_js)
+set_val("longitude", lon_js)
+set_val("accommodates", accommodates_js)
+set_val("beds", beds_js)
+set_val("bedrooms", bedrooms_js)
+set_val("minimum_nights", min_nights_js)
+set_val("maximum_nights", max_nights_js)
+
+# Engineered numeric
+beds_per_bedroom = beds_js / bedrooms_js if bedrooms_js > 0 else beds_js
+stay_flexibility = max_nights_js / min_nights_js if min_nights_js > 0 else max_nights_js
+occupancy_ratio = accommodates_js / beds_js if beds_js > 0 else accommodates_js
+
+set_val("beds_per_bedroom", beds_per_bedroom)
+set_val("stay_flexibility", stay_flexibility)
+set_val("occupancy_ratio", occupancy_ratio)
+
+# Neighbourhood name from geo_* key
+neigh_name = neigh_js.replace("geo_", "")
+
+# Get neighbourhood meta
+ne_meta = neigh_meta.get(neigh_name, None)
+
+if ne_meta is not None:
+    median_price_neigh = ne_meta["median_price_neigh"]
+    region_area_m2 = ne_meta["region_area_m2"]
+    cent_lat = ne_meta["centroid_lat"]
+    cent_lon = ne_meta["centroid_lon"]
+else:
+    median_price_neigh = price_js
+    region_area_m2 = 1.0
+    cent_lat = city_center_lat
+    cent_lon = city_center_lon
+
+# Distances based on lat/lon approximation
+def geo_dist_m(lat1, lon1, lat2, lon2):
+    # simple equirectangular approximation
+    km_per_deg = 111_000.0
+    dx = (lon1 - lon2) * math.cos(math.radians((lat1 + lat2) / 2))
+    dy = (lat1 - lat2)
+    return km_per_deg * math.sqrt(dx*dx + dy*dy)
+
+dist_to_region_centroid_m = geo_dist_m(lat_js, lon_js, cent_lat, cent_lon)
+dist_to_city_center_m = geo_dist_m(lat_js, lon_js, city_center_lat, city_center_lon)
+
+set_val("dist_to_region_centroid_m", dist_to_region_centroid_m)
+set_val("dist_to_city_center_m", dist_to_city_center_m)
+set_val("region_area_m2", region_area_m2)
+set_val("median_price_neigh", median_price_neigh)
+
+# More engineered features
+price_per_person = price_js / accommodates_js if accommodates_js > 0 else price_js
+price_per_bed = price_js / beds_js if beds_js > 0 else price_js
+price_normalized = price_js / dist_to_city_center_m if dist_to_city_center_m > 0 else price_js
+rel_price = price_js / median_price_neigh if median_price_neigh > 0 else 1.0
+
+set_val("price_per_person", price_per_person)
+set_val("price_per_bed", price_per_bed)
+set_val("price_normalized", price_normalized)
+set_val("rel_price", rel_price)
+
+# One-hot for room/prop/bath/geo
+def set_one_hot(prefix_list, chosen):
+    for col in prefix_list:
+        if col in x.columns:
+            x.at[0, col] = 1.0 if col == chosen else 0.0
+
+room_cols = [c for c in feature_order if c.startswith("room_")]
+prop_cols = [c for c in feature_order if c.startswith("prop_")]
+bath_cols = [c for c in feature_order if c.startswith("bath_")]
+geo_cols  = [c for c in feature_order if c.startswith("geo_")]
+
+set_one_hot(room_cols, room_type_js)
+set_one_hot(prop_cols, prop_type_js)
+set_one_hot(bath_cols, bath_type_js)
+set_one_hot(geo_cols, neigh_js)
+
+# ---------- Apply manual scaler ----------
+vals = x.values.astype("float64")
+vals_scaled = (vals - scaler_mean) / scaler_scale
+
+# ---------- Manual PCA transform ----------
+# sklearn: X_centered @ components_.T
+vals_centered = vals_scaled - pca_mean
+vals_pca = vals_centered @ pca_components.T
+
+# ---------- Manual KMeans predict ----------
+# argmin distance to cluster centers
+dists = np.linalg.norm(vals_pca - cluster_centers, axis=1)
+cluster_id = int(np.argmin(dists))
+segment = cluster_label_map.get(cluster_id, "unknown")
+
+# Fairness vs segment median
+seg_median = segment_median_price.get(segment, price_js)
+seg_rel = price_js / seg_median if seg_median > 0 else 1.0
+
+if seg_rel < 0.85:
+    fairness = "underpriced"
+elif seg_rel > 1.15:
+    fairness = "overpriced"
+else:
+    fairness = "fair"
+
+result = f"""
+Segment: {segment}
+Fairness: {fairness}
+Segment-relative price: {seg_rel:.2f}
+
+Internal features:
+  rel_price (vs neigh): {rel_price:.2f}
+  price_per_person: {price_per_person:.2f}
+  price_per_bed: {price_per_bed:.2f}
+  dist_to_city_center_m: {dist_to_city_center_m:.0f}
+  dist_to_region_centroid_m: {dist_to_region_centroid_m:.0f}
+"""
+
+result
+        `);
+
+        document.getElementById("output").textContent = result;
+    }
+</script>
+</body>
+</html>

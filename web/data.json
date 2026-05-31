@@ -1,0 +1,682 @@
+{
+  "version": 2,
+  "n_listings": 7846,
+  "k_total": 5,
+  "strata": [
+    "entire",
+    "private",
+    "specialty"
+  ],
+  "stratum_room_types": {
+    "entire": [
+      "Entire home/apt"
+    ],
+    "private": [
+      "Private room"
+    ],
+    "specialty": [
+      "Shared room",
+      "Hotel room"
+    ]
+  },
+  "feature_order": [
+    "accommodates",
+    "bedrooms",
+    "beds",
+    "bathrooms_n",
+    "amenities_count",
+    "latitude",
+    "longitude"
+  ],
+  "centroids_by_stratum": {
+    "entire": {
+      "feature_order": [
+        "accommodates",
+        "bedrooms",
+        "beds",
+        "bathrooms_n",
+        "amenities_count",
+        "latitude",
+        "longitude"
+      ],
+      "centroids_raw": [
+        [
+          2.4792250233426696,
+          1.1916433239962658,
+          1.3160597572362251,
+          1.109593837535014,
+          30.024976657329596,
+          52.365682812478994,
+          4.884122022371849
+        ],
+        [
+          4.366764995083582,
+          2.677974434611601,
+          3.0973451327433645,
+          1.641592920353982,
+          40.709439528023594,
+          52.369157781091445,
+          4.897416182190265
+        ]
+      ],
+      "scaler_mean": [
+        3.0868945868945867,
+        1.6701487812598923,
+        1.8895220006331117,
+        1.2808641975308641,
+        33.464704020259575,
+        52.3668015345679,
+        4.888401908581196
+      ],
+      "scaler_scale": [
+        1.3207678845918065,
+        0.9190562878819152,
+        1.39329139036151,
+        0.47780038399468694,
+        15.488743520577641,
+        0.0168189477723805,
+        0.03492592485751271
+      ],
+      "global_id_offset": 0,
+      "k": 2
+    },
+    "private": {
+      "feature_order": [
+        "accommodates",
+        "bedrooms",
+        "beds",
+        "bathrooms_n",
+        "amenities_count",
+        "latitude",
+        "longitude"
+      ],
+      "centroids_raw": [
+        [
+          2.034166666666666,
+          0.9375000000000004,
+          1.2033333333333343,
+          1.0999999999999999,
+          26.706666666666667,
+          52.36718964110833,
+          4.890516644736667
+        ],
+        [
+          4.239130434782609,
+          1.6557971014492754,
+          3.0978260869565224,
+          1.3731884057971013,
+          32.539855072463766,
+          52.36722571369565,
+          4.899566477028985
+        ]
+      ],
+      "scaler_mean": [
+        2.446476964769648,
+        1.0718157181571815,
+        1.5575880758807588,
+        1.1510840108401084,
+        27.79742547425474,
+        52.36719638638889,
+        4.892208889799458
+      ],
+      "scaler_scale": [
+        1.1288204266855026,
+        0.5424946978593561,
+        1.2275366451321803,
+        0.4581453905740385,
+        13.823569632430594,
+        0.017696972733504405,
+        0.03557663370608353
+      ],
+      "global_id_offset": 2,
+      "k": 2
+    }
+  },
+  "clusters": [
+    {
+      "id": 0,
+      "stratum": "entire",
+      "label": "Compact entire-places",
+      "color_index": 0,
+      "n": 4281,
+      "share": 0.5456283456538363,
+      "median_price": 200.0,
+      "p25_price": 150.0,
+      "p75_price": 260.0,
+      "median_accommodates": 2.0,
+      "median_bedrooms": 1.0,
+      "median_beds": 1.0,
+      "median_bathrooms": 1.0,
+      "median_amenities": 30.0,
+      "centroid_lat": 52.36567473456202,
+      "centroid_lon": 4.8841003302595185,
+      "dominant_room_type": "Entire home/apt",
+      "room_type_breakdown": {
+        "Entire home/apt": 1.0
+      },
+      "top_property_types": {
+        "Entire rental unit": 2718,
+        "Entire condo": 853,
+        "Entire home": 231
+      },
+      "top_neighbourhoods": {
+        "De Baarsjes - Oud-West": 921,
+        "De Pijp - Rivierenbuurt": 592,
+        "Centrum-West": 434,
+        "Westerpark": 377,
+        "Centrum-Oost": 330
+      }
+    },
+    {
+      "id": 1,
+      "stratum": "entire",
+      "label": "Spacious entire-places",
+      "color_index": 1,
+      "n": 2037,
+      "share": 0.25962273770073924,
+      "median_price": 300.0,
+      "p25_price": 220.0,
+      "p75_price": 405.0,
+      "median_accommodates": 4.0,
+      "median_bedrooms": 3.0,
+      "median_beds": 3.0,
+      "median_bathrooms": 1.5,
+      "median_amenities": 42.0,
+      "centroid_lat": 52.369169640029455,
+      "centroid_lon": 4.8974421917403035,
+      "dominant_room_type": "Entire home/apt",
+      "room_type_breakdown": {
+        "Entire home/apt": 1.0
+      },
+      "top_property_types": {
+        "Entire rental unit": 723,
+        "Entire home": 588,
+        "Entire condo": 315
+      },
+      "top_neighbourhoods": {
+        "De Baarsjes - Oud-West": 272,
+        "De Pijp - Rivierenbuurt": 198,
+        "Centrum-West": 161,
+        "Centrum-Oost": 160,
+        "Oud-Noord": 158
+      }
+    },
+    {
+      "id": 2,
+      "stratum": "private",
+      "label": "Compact private-rooms",
+      "color_index": 2,
+      "n": 1200,
+      "share": 0.15294417537598776,
+      "median_price": 126.0,
+      "p25_price": 94.5,
+      "p75_price": 168.0,
+      "median_accommodates": 2.0,
+      "median_bedrooms": 1.0,
+      "median_beds": 1.0,
+      "median_bathrooms": 1.0,
+      "median_amenities": 26.0,
+      "centroid_lat": 52.36718964110833,
+      "centroid_lon": 4.890516644736667,
+      "dominant_room_type": "Private room",
+      "room_type_breakdown": {
+        "Private room": 1.0
+      },
+      "top_property_types": {
+        "Private room in rental unit": 280,
+        "Private room in bed and breakfast": 210,
+        "Private room in condo": 121
+      },
+      "top_neighbourhoods": {
+        "Centrum-West": 308,
+        "Centrum-Oost": 171,
+        "De Baarsjes - Oud-West": 133,
+        "De Pijp - Rivierenbuurt": 87,
+        "Zuid": 75
+      }
+    },
+    {
+      "id": 3,
+      "stratum": "private",
+      "label": "Spacious private-rooms",
+      "color_index": 3,
+      "n": 276,
+      "share": 0.035177160336477185,
+      "median_price": 190.0,
+      "p25_price": 135.0,
+      "p75_price": 276.25,
+      "median_accommodates": 4.0,
+      "median_bedrooms": 2.0,
+      "median_beds": 3.0,
+      "median_bathrooms": 1.0,
+      "median_amenities": 32.0,
+      "centroid_lat": 52.36722571369565,
+      "centroid_lon": 4.899566477028985,
+      "dominant_room_type": "Private room",
+      "room_type_breakdown": {
+        "Private room": 1.0
+      },
+      "top_property_types": {
+        "Private room in bed and breakfast": 63,
+        "Room in hotel": 40,
+        "Private room in rental unit": 35
+      },
+      "top_neighbourhoods": {
+        "Centrum-West": 50,
+        "Centrum-Oost": 44,
+        "De Baarsjes - Oud-West": 26,
+        "De Pijp - Rivierenbuurt": 21,
+        "Oud-Noord": 18
+      }
+    },
+    {
+      "id": 4,
+      "stratum": "specialty",
+      "label": "Hotel/shared rooms",
+      "color_index": 4,
+      "n": 52,
+      "share": 0.00662758093295947,
+      "median_price": 180.0,
+      "p25_price": 78.5,
+      "p75_price": 471.5,
+      "median_accommodates": 2.0,
+      "median_bedrooms": 1.0,
+      "median_beds": 1.0,
+      "median_bathrooms": 1.0,
+      "median_amenities": 18.5,
+      "centroid_lat": 52.36211001423078,
+      "centroid_lon": 4.898960267807693,
+      "dominant_room_type": "Hotel room",
+      "room_type_breakdown": {
+        "Hotel room": 0.692,
+        "Shared room": 0.308
+      },
+      "top_property_types": {
+        "Room in bed and breakfast": 14,
+        "Shared room in hotel": 9,
+        "Room in hostel": 6
+      },
+      "top_neighbourhoods": {
+        "Centrum-West": 19,
+        "Centrum-Oost": 6,
+        "Oud-Oost": 6,
+        "Buitenveldert - Zuidas": 6,
+        "De Baarsjes - Oud-West": 5
+      }
+    }
+  ],
+  "neighbourhoods": {
+    "Bijlmer-Centrum": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 17,
+        "1": 5,
+        "2": 13,
+        "3": 7,
+        "4": 0
+      },
+      "total": 42,
+      "median_price": 113.0,
+      "median_accommodates": 3.0
+    },
+    "Bijlmer-Oost": {
+      "dominant_cluster": 2,
+      "counts": {
+        "0": 7,
+        "1": 7,
+        "2": 8,
+        "3": 0,
+        "4": 0
+      },
+      "total": 22,
+      "median_price": 115.0,
+      "median_accommodates": 2.0
+    },
+    "Bos en Lommer": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 288,
+        "1": 75,
+        "2": 27,
+        "3": 2,
+        "4": 0
+      },
+      "total": 392,
+      "median_price": 180.0,
+      "median_accommodates": 2.0
+    },
+    "Buitenveldert - Zuidas": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 46,
+        "1": 25,
+        "2": 19,
+        "3": 3,
+        "4": 6
+      },
+      "total": 99,
+      "median_price": 190.0,
+      "median_accommodates": 2.0
+    },
+    "Centrum-Oost": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 330,
+        "1": 160,
+        "2": 171,
+        "3": 44,
+        "4": 6
+      },
+      "total": 711,
+      "median_price": 210.0,
+      "median_accommodates": 2.0
+    },
+    "Centrum-West": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 434,
+        "1": 161,
+        "2": 308,
+        "3": 50,
+        "4": 19
+      },
+      "total": 972,
+      "median_price": 210.5,
+      "median_accommodates": 2.0
+    },
+    "De Aker - Nieuw Sloten": {
+      "dominant_cluster": 1,
+      "counts": {
+        "0": 14,
+        "1": 17,
+        "2": 17,
+        "3": 3,
+        "4": 0
+      },
+      "total": 51,
+      "median_price": 160.0,
+      "median_accommodates": 4.0
+    },
+    "De Baarsjes - Oud-West": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 921,
+        "1": 272,
+        "2": 133,
+        "3": 26,
+        "4": 5
+      },
+      "total": 1357,
+      "median_price": 219.0,
+      "median_accommodates": 2.0
+    },
+    "De Pijp - Rivierenbuurt": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 592,
+        "1": 198,
+        "2": 87,
+        "3": 21,
+        "4": 0
+      },
+      "total": 898,
+      "median_price": 235.0,
+      "median_accommodates": 2.0
+    },
+    "Gaasperdam - Driemond": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 14,
+        "1": 13,
+        "2": 9,
+        "3": 3,
+        "4": 4
+      },
+      "total": 43,
+      "median_price": 144.0,
+      "median_accommodates": 3.0
+    },
+    "Geuzenveld - Slotermeer": {
+      "dominant_cluster": 1,
+      "counts": {
+        "0": 37,
+        "1": 43,
+        "2": 24,
+        "3": 9,
+        "4": 0
+      },
+      "total": 113,
+      "median_price": 180.0,
+      "median_accommodates": 4.0
+    },
+    "IJburg - Zeeburgereiland": {
+      "dominant_cluster": 1,
+      "counts": {
+        "0": 24,
+        "1": 106,
+        "2": 21,
+        "3": 9,
+        "4": 0
+      },
+      "total": 160,
+      "median_price": 218.0,
+      "median_accommodates": 4.0
+    },
+    "Noord-Oost": {
+      "dominant_cluster": 1,
+      "counts": {
+        "0": 25,
+        "1": 79,
+        "2": 18,
+        "3": 13,
+        "4": 0
+      },
+      "total": 135,
+      "median_price": 182.0,
+      "median_accommodates": 4.0
+    },
+    "Noord-West": {
+      "dominant_cluster": 1,
+      "counts": {
+        "0": 42,
+        "1": 138,
+        "2": 31,
+        "3": 4,
+        "4": 1
+      },
+      "total": 216,
+      "median_price": 180.0,
+      "median_accommodates": 4.0
+    },
+    "Oostelijk Havengebied - Indische Buurt": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 201,
+        "1": 75,
+        "2": 33,
+        "3": 10,
+        "4": 0
+      },
+      "total": 319,
+      "median_price": 175.0,
+      "median_accommodates": 2.0
+    },
+    "Osdorp": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 25,
+        "1": 9,
+        "2": 13,
+        "3": 2,
+        "4": 0
+      },
+      "total": 49,
+      "median_price": 150.0,
+      "median_accommodates": 3.0
+    },
+    "Oud-Noord": {
+      "dominant_cluster": 1,
+      "counts": {
+        "0": 141,
+        "1": 158,
+        "2": 51,
+        "3": 18,
+        "4": 0
+      },
+      "total": 368,
+      "median_price": 198.5,
+      "median_accommodates": 4.0
+    },
+    "Oud-Oost": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 258,
+        "1": 115,
+        "2": 44,
+        "3": 15,
+        "4": 6
+      },
+      "total": 438,
+      "median_price": 199.0,
+      "median_accommodates": 2.0
+    },
+    "Slotervaart": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 85,
+        "1": 28,
+        "2": 21,
+        "3": 2,
+        "4": 0
+      },
+      "total": 136,
+      "median_price": 172.5,
+      "median_accommodates": 3.0
+    },
+    "Watergraafsmeer": {
+      "dominant_cluster": 1,
+      "counts": {
+        "0": 75,
+        "1": 86,
+        "2": 30,
+        "3": 12,
+        "4": 0
+      },
+      "total": 203,
+      "median_price": 199.0,
+      "median_accommodates": 4.0
+    },
+    "Westerpark": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 377,
+        "1": 110,
+        "2": 47,
+        "3": 9,
+        "4": 2
+      },
+      "total": 545,
+      "median_price": 200.0,
+      "median_accommodates": 2.0
+    },
+    "Zuid": {
+      "dominant_cluster": 0,
+      "counts": {
+        "0": 328,
+        "1": 157,
+        "2": 75,
+        "3": 14,
+        "4": 3
+      },
+      "total": 577,
+      "median_price": 229.0,
+      "median_accommodates": 2.0
+    }
+  },
+  "k_selection": {
+    "entire": [
+      {
+        "stratum": "entire",
+        "k": 2,
+        "silhouette": 0.29921525626708156,
+        "davies_bouldin": 1.5220611161808284,
+        "calinski_harabasz": 2168.4238821845975,
+        "inertia": 32922.876705810195
+      },
+      {
+        "stratum": "entire",
+        "k": 3,
+        "silhouette": 0.23053053187898667,
+        "davies_bouldin": 1.727574567441011,
+        "calinski_harabasz": 1629.8671103927734,
+        "inertia": 29169.268773414515
+      },
+      {
+        "stratum": "entire",
+        "k": 4,
+        "silhouette": 0.21877600596322633,
+        "davies_bouldin": 1.550658231188372,
+        "calinski_harabasz": 1391.7067321195595,
+        "inertia": 26622.279075649923
+      },
+      {
+        "stratum": "entire",
+        "k": 5,
+        "silhouette": 0.1672456262888237,
+        "davies_bouldin": 1.5389839114949353,
+        "calinski_harabasz": 1287.8922250238452,
+        "inertia": 24353.185462338457
+      },
+      {
+        "stratum": "entire",
+        "k": 6,
+        "silhouette": 0.1807673841345141,
+        "davies_bouldin": 1.4981863279803065,
+        "calinski_harabasz": 1233.3845079195644,
+        "inertia": 22370.081320257726
+      }
+    ],
+    "private": [
+      {
+        "stratum": "private",
+        "k": 2,
+        "silhouette": 0.36195535550100744,
+        "davies_bouldin": 1.5734591916684018,
+        "calinski_harabasz": 336.06369442394794,
+        "inertia": 8413.719388392425
+      },
+      {
+        "stratum": "private",
+        "k": 3,
+        "silhouette": 0.34494306446833717,
+        "davies_bouldin": 1.16725816751043,
+        "calinski_harabasz": 300.7004235762946,
+        "inertia": 7336.593610097245
+      },
+      {
+        "stratum": "private",
+        "k": 4,
+        "silhouette": 0.1638430293794069,
+        "davies_bouldin": 1.4299203768651343,
+        "calinski_harabasz": 283.58488806682294,
+        "inertia": 6547.7042786573675
+      },
+      {
+        "stratum": "private",
+        "k": 5,
+        "silhouette": 0.1681601783761749,
+        "davies_bouldin": 1.3377876704726375,
+        "calinski_harabasz": 270.48105669684844,
+        "inertia": 5953.318880570799
+      },
+      {
+        "stratum": "private",
+        "k": 6,
+        "silhouette": 0.17129752729971506,
+        "davies_bouldin": 1.1212774060903061,
+        "calinski_harabasz": 267.84112921158163,
+        "inertia": 5406.549875099641
+      }
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "raw_rows": 10075,
+  "rows_after_clean": 7846,
+  "columns": [
+    "id",
+    "latitude",
+    "longitude",
+    "neighbourhood_cleansed",
+    "property_type",
+    "room_type",
+    "accommodates",
+    "bedrooms",
+    "beds",
+    "bathrooms_n",
+    "bathrooms_kind",
+    "amenities_count",
+    "minimum_nights",
+    "maximum_nights",
+    "availability_365",
+    "estimated_occupancy_l365d",
+    "instant_bookable",
+    "number_of_reviews",
+    "review_scores_rating",
+    "price"
+  ],
+  "median_price": 200.0,
+  "neighbourhoods": 22,
+  "room_types": {
+    "Entire home/apt": 6318,
+    "Private room": 1476,
+    "Hotel room": 36,
+    "Shared room": 16
+  }
+}

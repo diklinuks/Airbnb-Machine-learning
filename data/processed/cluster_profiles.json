@@ -1,0 +1,173 @@
+[
+  {
+    "cluster": 0,
+    "stratum": "entire",
+    "n": 4281,
+    "share": 0.5456283456538363,
+    "median_price": 200.0,
+    "mean_price": 219.62999299229153,
+    "p25_price": 150.0,
+    "p75_price": 260.0,
+    "median_accommodates": 2.0,
+    "median_bedrooms": 1.0,
+    "median_beds": 1.0,
+    "median_bathrooms": 1.0,
+    "median_amenities": 30.0,
+    "centroid_lat": 52.36567473456202,
+    "centroid_lon": 4.8841003302595185,
+    "dominant_room_type": "Entire home/apt",
+    "room_type_breakdown": {
+      "Entire home/apt": 1.0
+    },
+    "top_property_types": {
+      "Entire rental unit": 2718,
+      "Entire condo": 853,
+      "Entire home": 231
+    },
+    "top_neighbourhoods": {
+      "De Baarsjes - Oud-West": 921,
+      "De Pijp - Rivierenbuurt": 592,
+      "Centrum-West": 434,
+      "Westerpark": 377,
+      "Centrum-Oost": 330
+    },
+    "label": "Compact entire-places"
+  },
+  {
+    "cluster": 1,
+    "stratum": "entire",
+    "n": 2037,
+    "share": 0.25962273770073924,
+    "median_price": 300.0,
+    "mean_price": 335.6539027982327,
+    "p25_price": 220.0,
+    "p75_price": 405.0,
+    "median_accommodates": 4.0,
+    "median_bedrooms": 3.0,
+    "median_beds": 3.0,
+    "median_bathrooms": 1.5,
+    "median_amenities": 42.0,
+    "centroid_lat": 52.369169640029455,
+    "centroid_lon": 4.8974421917403035,
+    "dominant_room_type": "Entire home/apt",
+    "room_type_breakdown": {
+      "Entire home/apt": 1.0
+    },
+    "top_property_types": {
+      "Entire rental unit": 723,
+      "Entire home": 588,
+      "Entire condo": 315
+    },
+    "top_neighbourhoods": {
+      "De Baarsjes - Oud-West": 272,
+      "De Pijp - Rivierenbuurt": 198,
+      "Centrum-West": 161,
+      "Centrum-Oost": 160,
+      "Oud-Noord": 158
+    },
+    "label": "Spacious entire-places"
+  },
+  {
+    "cluster": 2,
+    "stratum": "private",
+    "n": 1200,
+    "share": 0.15294417537598776,
+    "median_price": 126.0,
+    "mean_price": 169.35195,
+    "p25_price": 94.5,
+    "p75_price": 168.0,
+    "median_accommodates": 2.0,
+    "median_bedrooms": 1.0,
+    "median_beds": 1.0,
+    "median_bathrooms": 1.0,
+    "median_amenities": 26.0,
+    "centroid_lat": 52.36718964110833,
+    "centroid_lon": 4.890516644736667,
+    "dominant_room_type": "Private room",
+    "room_type_breakdown": {
+      "Private room": 1.0
+    },
+    "top_property_types": {
+      "Private room in rental unit": 280,
+      "Private room in bed and breakfast": 210,
+      "Private room in condo": 121
+    },
+    "top_neighbourhoods": {
+      "Centrum-West": 308,
+      "Centrum-Oost": 171,
+      "De Baarsjes - Oud-West": 133,
+      "De Pijp - Rivierenbuurt": 87,
+      "Zuid": 75
+    },
+    "label": "Compact private-rooms"
+  },
+  {
+    "cluster": 3,
+    "stratum": "private",
+    "n": 276,
+    "share": 0.035177160336477185,
+    "median_price": 190.0,
+    "mean_price": 238.65579710144928,
+    "p25_price": 135.0,
+    "p75_price": 276.25,
+    "median_accommodates": 4.0,
+    "median_bedrooms": 2.0,
+    "median_beds": 3.0,
+    "median_bathrooms": 1.0,
+    "median_amenities": 32.0,
+    "centroid_lat": 52.36722571369565,
+    "centroid_lon": 4.899566477028985,
+    "dominant_room_type": "Private room",
+    "room_type_breakdown": {
+      "Private room": 1.0
+    },
+    "top_property_types": {
+      "Private room in bed and breakfast": 63,
+      "Room in hotel": 40,
+      "Private room in rental unit": 35
+    },
+    "top_neighbourhoods": {
+      "Centrum-West": 50,
+      "Centrum-Oost": 44,
+      "De Baarsjes - Oud-West": 26,
+      "De Pijp - Rivierenbuurt": 21,
+      "Oud-Noord": 18
+    },
+    "label": "Spacious private-rooms"
+  },
+  {
+    "cluster": 4,
+    "stratum": "specialty",
+    "n": 52,
+    "share": 0.00662758093295947,
+    "median_price": 180.0,
+    "mean_price": 340.38461538461536,
+    "p25_price": 78.5,
+    "p75_price": 471.5,
+    "median_accommodates": 2.0,
+    "median_bedrooms": 1.0,
+    "median_beds": 1.0,
+    "median_bathrooms": 1.0,
+    "median_amenities": 18.5,
+    "centroid_lat": 52.36211001423078,
+    "centroid_lon": 4.898960267807693,
+    "dominant_room_type": "Hotel room",
+    "room_type_breakdown": {
+      "Hotel room": 0.692,
+      "Shared room": 0.308
+    },
+    "top_property_types": {
+      "Room in bed and breakfast": 14,
+      "Shared room in hotel": 9,
+      "Room in hostel": 6
+    },
+    "top_neighbourhoods": {
+      "Centrum-West": 19,
+      "Centrum-Oost": 6,
+      "Oud-Oost": 6,
+      "Buitenveldert - Zuidas": 6,
+      "De Baarsjes - Oud-West": 5
+    },
+    "label": "Hotel/shared rooms"
+  }
+]

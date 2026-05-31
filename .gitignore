@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.ipynb_checkpoints/
+
+# Env
+.venv/
+venv/
+
+# OS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+.claude/
+
+# Raw data is not committed — download it from Inside Airbnb (see README)
+data/raw/
+
+# Processed parquet (regenerable)
+data/processed/*.parquet
+
+# Reports — keep figures, not pdfs
+reports/*.pdf
